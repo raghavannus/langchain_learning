@@ -7,9 +7,14 @@ from langchain_core.messages import HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_tavily import TavilySearch
 
-# 1. Dynamically find the parent folder to reach Setup/
-current_dir = Path(__file__).resolve().parent
-env_path = current_dir.parent / "Setup" / ".env"
+# 1. Get the absolute path of the file itself, ignoring terminal execution directory
+current_file_path = Path(__file__).resolve()
+
+# 2. Walk straight up to the 'Agentic' root directory by finding it by name
+project_root = next(p for p in current_file_path.parents if p.name == "Agentic")
+
+# 3. Formulate the clean absolute path to the .env file inside Setup
+env_path = project_root / "Setup" / ".env"
 load_dotenv(dotenv_path=env_path)
 
 web_search = TavilySearch(max_results=3)
